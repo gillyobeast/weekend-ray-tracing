@@ -1,5 +1,4 @@
 import java.io.File
-
 fun main() {
     val file = File("./output.ppm")
     val width = 200
@@ -10,10 +9,8 @@ fun main() {
 
     for (row in (height - 1).downTo(0)) {
         for (column in 0..<width) {
-            val red = column.toDouble() / width
-            val green = row.toDouble() / width
-            val blue = 0.2
-            file.write("${red.scale()} ${green.scale()} ${blue.scale()}")
+            val colour = Colour(column.toDouble() / width, row.toDouble() / width, 0.2)
+            file.write("${colour.r.scale()} ${colour.y.scale()} ${colour.z.scale()}")
         }
     }
 }
