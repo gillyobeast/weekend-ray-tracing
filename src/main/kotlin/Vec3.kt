@@ -1,9 +1,13 @@
 import kotlin.math.sqrt
 
 class Vec3(val x: Double, val y: Double, val z: Double) {
+    // convenience constructor
+    constructor(x: Int, y: Int, z: Int) : this(x.toDouble(), y.toDouble(), z.toDouble())
+
     val r = x;
     val g = y;
     val b = z;
+
 
     operator fun unaryPlus() = this
     operator fun unaryMinus() = Vec3(-x, -y, -z)
