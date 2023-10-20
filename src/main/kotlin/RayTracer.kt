@@ -8,8 +8,8 @@ fun main() {
     file.write("$width $height")
     file.write("255")
 
-    for (row in height.downTo(0)) {
-        for (column in 0..width) {
+    for (row in (height - 1).downTo(0)) {
+        for (column in 0..<width) {
             val red = column.toDouble() / width
             val green = row.toDouble() / width
             val blue = 0.2
