@@ -32,5 +32,6 @@ class Vec3(val x: Double, val y: Double, val z: Double) {
 
 }
 typealias Colour = Vec3
+typealias Point = Vec3
 
-operator fun Int.times(vec3: Vec3) = Vec3(this * vec3.x, this * vec3.y, this * vec3.z)
+operator fun Double.times(vec3: Vec3) = Vec3(this * vec3.x, this * vec3.y, this * vec3.z)
