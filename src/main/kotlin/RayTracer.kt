@@ -1,35 +1,39 @@
 import java.io.File
 import java.time.Instant
 import kotlin.random.Random
+import kotlin.time.measureTime
 
 private val random = Random(Instant.now().nano)
 fun main() {
-    val file = File("./output.ppm")
-    val width = 200
-    val height = 100
-    val samples = 100
+    println(measureTime {
+        val file = File("./output.ppm")
+        val width = 200
+        val height = 100
+        val samples = 100
 
-    file.writePpmHeader(width, height)
+        file.writePpmHeader(width, height)
 
-    val camera = Camera()
+        val camera = Camera()
 
-    val world = HittableList(
-        Sphere(Point(0, 0, -1), 0.5),
-        Sphere(Point(0.0, -100.5, -1.0), 100),
-    )
+        val world = HittableList(
+            Sphere(Point(0, 0, -1), 0.5),
+            Sphere(Point(0.0, -100.5, -1.0), 100),
+        )
 
-    for (row in (height - 1) downTo 0) {
-        for (column in 0..<width) {
-            val colour = (1..samples)
-                .asSequence()
-                .map {
-                    val u: Double = column.perturb() / width.d
-                    val v: Double = row.perturb() / height.d
-                    colour(camera.getRay(u, v), world)
-                }.reduce(Colour::plus) / samples.d
-            file.write(colour)
+        for (row in (height - 1) downTo 0) {
+            for (column in 0..<width) {
+                val colour = (1..samples)
+                    .asSequence()
+                    .map {
+                        val u: Double = column.perturb() / width.d
+                        val v: Double = row.perturb() / height.d
+                        colour(camera.getRay(u, v), world)
+                    }.reduce(Colour::plus) / samples.d
+                file.write(colour)
+            }
         }
-    }
+    })
+
 }
 
 private fun randomPointInUnitSphere(): Point =
