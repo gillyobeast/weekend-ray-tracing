@@ -2,8 +2,8 @@ import java.io.File
 
 fun main() {
     val file = File("./output.ppm")
-    val width = 20
-    val height = 10
+    val width = 200
+    val height = 100
     file.writePpmHeader(width, height)
     val lowerLeft = Point(-2, -1, -1)
     val horizontal = Vec3(4, 0, 0)

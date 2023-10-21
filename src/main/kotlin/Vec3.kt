@@ -22,7 +22,7 @@ class Vec3(val x: Double, val y: Double, val z: Double) {
     operator fun times(scale: Double) = Vec3(x * scale, y * scale, z * scale)
     operator fun div(scale: Double) = Vec3(x / scale, y / scale, z / scale)
 
-    infix fun dot(other: Vec3): Double = x * other.x + y + other.y + z * other.z
+    infix fun dot(other: Vec3): Double = x * other.x + y * other.y + z * other.z
     infix fun cross(other: Vec3): Vec3 = Vec3(
         y * other.z - z * other.y,
         -(x * other.z - z * other.x),
