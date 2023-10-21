@@ -3,4 +3,4 @@ interface Hittable {
     fun hit(ray: Ray, tMin: Double, tMax: Double): HitRecord?
 }
 
-data class HitRecord(val t: Double, val P: Point, val normal: Vec3)
+data class HitRecord(val time: Double, val hitPoint: Point, val normalAtPoint: Vec3)

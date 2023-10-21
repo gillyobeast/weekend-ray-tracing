@@ -1,6 +1,8 @@
 import kotlin.math.sqrt
 
 class Sphere(val center: Point, val radius: Double) : Hittable {
+    constructor(center: Point, radius: Int) : this(center, radius.toDouble())
+
     override fun hit(ray: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = ray.origin - center
         val a = ray.direction dot ray.direction

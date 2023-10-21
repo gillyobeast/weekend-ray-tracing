@@ -3,41 +3,37 @@ import kotlin.math.sqrt
 
 fun main() {
     val file = File("./output.ppm")
-    val width = 200
-    val height = 100
+    val width = 200 * 2
+    val height = 100 * 2
     file.writePpmHeader(width, height)
     val lowerLeft = Point(-2, -1, -1)
     val horizontal = Vec3(4, 0, 0)
     val vertical = Vec3(0, 2, 0)
     val origin = Point(0, 0, 0)
+
+    val world = HittableList(
+        Sphere(Point(0, 0, -1), 0.5),
+        Sphere(Point(0.0, -100.5, -1.0), 100),
+    )
+
     for (row in (height - 1) downTo 0) {
         for (column in 0..<width) {
             val u: Double = column.toDouble() / width.toDouble()
             val v: Double = row.toDouble() / height.toDouble()
             val ray = Ray(origin, lowerLeft + u * horizontal + v * vertical)
-            val colour = colour(ray)
+            val colour = colour(ray, world)
             file.write("${colour.r.scale()} ${colour.g.scale()} ${colour.b.scale()}")
         }
     }
 }
 
-fun Ray.sphereHitParam(center: Point, radius: Double): Double? {
-    val oc = origin - center
-    val a = direction dot direction
-    val b = 2.0 * (oc dot direction)
-    val c = (oc dot oc) - (radius * radius)
-    val discriminant = (b * b) - (4 * a * c)
-    return if (discriminant < 0) null else (-b - sqrt(discriminant)) / (2.0 * a)
+fun colour(ray: Ray, world: HittableList): Colour {
+    val hit = world.hit(ray, 0.00, Double.MAX_VALUE)
+    return if (hit != null) colourFor(hit.normalAtPoint) else background(ray)
 }
 
-fun colour(ray: Ray): Colour {
-    val center = Point(0, 0, -1)
-    val param = ray.sphereHitParam(center, 0.5)
-    if (param != null) {
-        val normal = (ray.pointAtParameter(param) - center).makeUnitVector()
-        return 0.5 * Colour(normal.x + 1, normal.y + 1, normal.z + 1)
-    }
-    return background(ray)
+private fun colourFor(normal: Vec3): Vec3 {
+    return 0.5 * Colour(normal.x + 1, normal.y + 1, normal.z + 1)
 }
 
 private fun background(ray: Ray): Vec3 {
