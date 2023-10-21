@@ -2,8 +2,8 @@ import java.io.File
 
 fun main() {
     val file = File("./output.ppm")
-    val width = 200
-    val height = 100
+    val width = 20
+    val height = 10
     file.writePpmHeader(width, height)
     val lowerLeft = Point(-2, -1, -1)
     val horizontal = Vec3(4, 0, 0)
@@ -23,9 +23,9 @@ fun main() {
 fun Ray.hitsSphere(center: Point, radius: Double): Boolean {
     val oc = origin - center
     val a = direction dot direction
-    val b = 2.0 * oc dot direction
+    val b = 2.0 * (oc dot direction)
     val c = (oc dot oc) - (radius * radius)
-    val discriminant = (b * b) - (4 * a * c);
+    val discriminant = (b * b) - (4 * a * c)
     return discriminant > 0
 }
 

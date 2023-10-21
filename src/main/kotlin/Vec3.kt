@@ -31,7 +31,7 @@ class Vec3(val x: Double, val y: Double, val z: Double) {
 
     fun makeUnitVector(): Vec3 = this / length()
 
-    fun squaredLength() = x * x + y * y + z * z
+    fun squaredLength() = this dot this
     fun length() = sqrt(squaredLength())
     override fun toString(): String {
         return "($x, $y, $z)"
