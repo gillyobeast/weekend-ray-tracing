@@ -1,4 +1,5 @@
 import java.io.File
+import kotlin.math.sqrt
 
 fun main() {
     val file = File("./output.ppm")
@@ -20,18 +21,21 @@ fun main() {
     }
 }
 
-fun Ray.hitsSphere(center: Point, radius: Double): Boolean {
+fun Ray.sphereHitParam(center: Point, radius: Double): Double? {
     val oc = origin - center
     val a = direction dot direction
     val b = 2.0 * (oc dot direction)
     val c = (oc dot oc) - (radius * radius)
     val discriminant = (b * b) - (4 * a * c)
-    return discriminant > 0
+    return if (discriminant < 0) null else (-b - sqrt(discriminant)) / (2.0 * a)
 }
 
 fun colour(ray: Ray): Colour {
-    if (ray.hitsSphere(Point(0, 0, -1), 0.5)) {
-        return Colour(1, 0, 0)
+    val center = Point(0, 0, -1)
+    val param = ray.sphereHitParam(center, 0.5)
+    if (param != null) {
+        val normal = (ray.pointAtParameter(param) - center).makeUnitVector()
+        return 0.5 * Colour(normal.x + 1, normal.y + 1, normal.z + 1)
     }
     return background(ray)
 }
