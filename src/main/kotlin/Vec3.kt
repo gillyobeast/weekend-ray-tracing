@@ -33,6 +33,9 @@ class Vec3(val x: Double, val y: Double, val z: Double) {
 
     fun squaredLength() = x * x + y * y + z * z
     fun length() = sqrt(squaredLength())
+    override fun toString(): String {
+        return "($x, $y, $z)"
+    }
 
 }
 typealias Colour = Vec3
