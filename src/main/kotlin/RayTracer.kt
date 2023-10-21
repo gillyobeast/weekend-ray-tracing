@@ -1,15 +1,17 @@
 import java.io.File
-import kotlin.math.sqrt
+import java.time.Instant
+import kotlin.random.Random
 
 fun main() {
     val file = File("./output.ppm")
-    val width = 200 * 2
-    val height = 100 * 2
+    val width = 200
+    val height = 100
+    val samples = 100
+
     file.writePpmHeader(width, height)
-    val lowerLeft = Point(-2, -1, -1)
-    val horizontal = Vec3(4, 0, 0)
-    val vertical = Vec3(0, 2, 0)
-    val origin = Point(0, 0, 0)
+
+    val camera = Camera()
+    val random = Random(Instant.now().nano)
 
     val world = HittableList(
         Sphere(Point(0, 0, -1), 0.5),
@@ -18,21 +20,29 @@ fun main() {
 
     for (row in (height - 1) downTo 0) {
         for (column in 0..<width) {
-            val u: Double = column.toDouble() / width.toDouble()
-            val v: Double = row.toDouble() / height.toDouble()
-            val ray = Ray(origin, lowerLeft + u * horizontal + v * vertical)
-            val colour = colour(ray, world)
-            file.write("${colour.r.scale()} ${colour.g.scale()} ${colour.b.scale()}")
+            val colour = (1..samples)
+                .asSequence()
+                .map {
+                    val u: Double = column.perturb(random) / width.d
+                    val v: Double = row.perturb(random) / height.d
+                    colour(camera.getRay(u, v), world)
+                }.reduce(Colour::plus) / samples.d
+            file.write(colour)
         }
     }
 }
+
+private val Int.d: Double
+    get() = toDouble()
+
+private fun Int.perturb(random: Random) = d + random.nextDouble()
 
 fun colour(ray: Ray, world: HittableList): Colour {
     val hit = world.hit(ray, 0.00, Double.MAX_VALUE)
     return if (hit != null) colourFor(hit.normalAtPoint) else background(ray)
 }
 
-private fun colourFor(normal: Vec3): Vec3 {
+private fun colourFor(normal: Vec3): Colour {
     return 0.5 * Colour(normal.x + 1, normal.y + 1, normal.z + 1)
 }
 
@@ -50,6 +60,10 @@ private fun File.writePpmHeader(width: Int, height: Int) {
 
 private fun File.write(s: String) {
     appendText(s + "\n")
+}
+
+private fun File.write(colour: Vec3) {
+    write("${colour.r.scale()} ${colour.g.scale()} ${colour.b.scale()}")
 }
 
 
