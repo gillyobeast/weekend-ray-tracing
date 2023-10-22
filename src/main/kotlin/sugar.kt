@@ -9,3 +9,5 @@ operator fun StringBuilder.invoke(): String {
 
 
 val Number.d get() = this.toDouble()
+
+operator fun Double.times(vector: Vector) = vector * this

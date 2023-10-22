@@ -18,7 +18,6 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     operator fun minus(other: Vector) = spread(Double::minus, other)
     operator fun times(other: Vector) = spread(Double::times, other)
     operator fun times(scale: Double) = Vector(x * scale, y * scale, x * scale)
-    operator fun Double.times(vector: Vector) = vector * this
     operator fun div(scale: Double) = this * (1 / scale)
 
     infix fun dot(other: Vector): Double = x * other.x + y * other.y + z * other.z
