@@ -1,6 +1,10 @@
-operator fun StringBuilder.plus(s: String): StringBuilder {
+operator fun StringBuilder.plus(s: Any): StringBuilder {
     this.append(s)
     return this
+}
+
+operator fun StringBuilder.invoke(): String {
+    return toString()
 }
 
 
