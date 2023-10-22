@@ -18,7 +18,8 @@ class RayTracer {
                 val u = column.d - (canvas.width - 1)
                 val v = row.d - (canvas.height - 1)
 
-                output + colour(Ray(origin, lowerLeft + u * horizontal + v * vertical - origin))
+                val ray = Ray(origin, lowerLeft + u * horizontal + v * vertical - origin)
+                output + colour(ray)
             }
             output + "\n"
         }
@@ -28,8 +29,8 @@ class RayTracer {
 
     private fun colour(ray: Ray): Colour {
         val unit = ray.direction.normalised()
-        val t = .5 * (unit.y + 1)
-        return Colour(1, 1, 1) * (1 - t) + Colour(0.5, 0.7, 1) * t
+        val t = (unit.y + 1)
+        return Colour(1, 1, 1) * (1 - t) + Colour(0,0,0) * t
     }
 
     private fun buildHeader(canvas: Canvas): StringBuilder {
