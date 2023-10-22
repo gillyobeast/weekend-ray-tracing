@@ -2,7 +2,11 @@ import java.io.File
 import kotlin.time.measureTime
 
 fun main() {
-    val canvas = 256 by 256
+
+    val aspectRatio = 16.0 / 9.0
+    val width = 400
+    val height = (width * aspectRatio).toInt()
+    val canvas = Canvas(width, height)
 
     val output: String
 
