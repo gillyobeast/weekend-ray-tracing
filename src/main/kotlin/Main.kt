@@ -1,13 +1,23 @@
-
 import java.io.File
+import kotlin.time.measureTime
 
 fun main() {
     val canvas = 256 by 256
 
-    val output = RayTracer().render(canvas)
+    val output: String
 
-    with(File("output.ppm")) {
-        writeText(output)
-    }
+    measureTime {
+        output = RayTracer().render(canvas)
+    }.print("Rendered in: ")
+
+    measureTime {
+        with(File("output.ppm")) {
+            writeText(output)
+        }
+    }.print("Wrote file in: ")
+}
+
+private fun Any.print(prefix: String = "") {
+    println(prefix + this)
 }
 
