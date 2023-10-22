@@ -4,4 +4,4 @@ operator fun StringBuilder.plus(s: String): StringBuilder {
 }
 
 
-val Int.d get() = this.toDouble()
+val Number.d get() = this.toDouble()
