@@ -5,8 +5,8 @@ fun main() {
 
     val aspectRatio = 16.0 / 9.0
     val width = 400
-    val height = (width * aspectRatio).toInt()
-    val canvas = Canvas(width, height)
+    val height = (width / aspectRatio).toInt()
+    val canvas = Canvas(width, height, aspectRatio)
 
     val output: String
 

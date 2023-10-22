@@ -17,18 +17,18 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     operator fun plus(other: Vector) = spread(Double::plus, other)
     operator fun minus(other: Vector) = spread(Double::minus, other)
     operator fun times(other: Vector) = spread(Double::times, other)
-    operator fun times(scale: Double) = Vector(x * scale, y * scale, x * scale)
+    operator fun times(scale: Double) = Vector(x * scale, y * scale, z * scale)
     operator fun div(scale: Double) = this * (1 / scale)
 
     infix fun dot(other: Vector): Double = x * other.x + y * other.y + z * other.z
     infix fun cross(other: Vector): Vector = Vector(
         this.y * other.z - this.z * other.y,
         this.z * other.x - this.x * other.z,
-        this.x * other.y - this.y * other.z
+        this.x * other.y - this.y * other.x
     )
 
 
-    private fun spread(op: Double.(Double) -> Double, o: Vector) = Vector(x.op(o.x), y.op(o.y), z.op(z + o.x))
+    private fun spread(op: Double.(Double) -> Double, o: Vector) = Vector(x.op(o.x), y.op(o.y), z.op(z))
 
-    fun normalise() = this / this.length()
+    fun normalised() = this / this.length()
 }
