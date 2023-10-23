@@ -28,7 +28,7 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     )
 
 
-    private fun spread(op: Double.(Double) -> Double, o: Vector) = Vector(x.op(o.x), y.op(o.y), z.op(z))
+    private fun spread(op: Double.(Double) -> Double, o: Vector) = Vector(x.op(o.x), y.op(o.y), z.op(o.z))
 
     fun normalised() = this / this.length()
 
