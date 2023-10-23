@@ -20,8 +20,8 @@ class RayTracer {
         for (row in canvas.rows.reversed()) {
             println("Scanlines remaining: ${row + 1}")
             for (column in canvas.columns) {
-                val u = column.d - (canvas.width - 1)
-                val v = row.d - (canvas.height - 1)
+                val u = column.d / (canvas.width - 1)
+                val v = row.d / (canvas.height - 1)
 
                 val ray = Ray(origin, lowerLeft + u * horizontal + v * vertical - origin)
                 output + colour(ray)
@@ -51,7 +51,7 @@ class RayTracer {
 
     private fun background(ray: Ray): Colour {
         val unit = ray.direction.normalised()
-        val t = (unit.y + 1)
+        val t = 0.5*(unit.y + 1)
         return WHITE * (1 - t) + BLACK * t
     }
 
