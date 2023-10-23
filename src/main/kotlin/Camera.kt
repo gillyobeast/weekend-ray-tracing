@@ -1,6 +1,6 @@
 class Camera(canvas: Canvas) {
 
-    private val origin: Point;
+    private val origin: Point
     private val horizontal: Vector
     private val vertical: Vector
     private val lowerLeft: Point
