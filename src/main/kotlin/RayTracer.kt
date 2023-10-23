@@ -5,21 +5,12 @@ class RayTracer {
     fun render(canvas: Canvas): String {
         val output = buildHeader(canvas)
 
-        //  World   //
         val world: Hittable = HittableList(
             Sphere(Point(0, 0, -1), 0.5),
             Sphere(Point(0, -100.5, -1), 100),
         )
 
-        //  Camera  //
-        val viewportHeight = 2.0
-        val viewportWidth = viewportHeight * canvas.aspectRatio
-        val focalLength = 1.0
-
-        val origin = Point()
-        val horizontal = Vector(viewportWidth, 0, 0)
-        val vertical = Vector(0, viewportHeight, 0)
-        val lowerLeft: Point = origin - .5 * horizontal - .5 * vertical - Vector(0, 0, focalLength)
+        val camera = Camera(canvas)
 
         for (row in canvas.rows.reversed()) {
             println("Scanlines remaining: ${row + 1}")
@@ -27,8 +18,7 @@ class RayTracer {
                 val u = column.d / (canvas.width - 1)
                 val v = row.d / (canvas.height - 1)
 
-                val ray = Ray(origin, lowerLeft + u * horizontal + v * vertical - origin)
-                output + colour(ray, world)
+                output + colour(camera[u, v], world)
             }
             output + "\n"
         }
