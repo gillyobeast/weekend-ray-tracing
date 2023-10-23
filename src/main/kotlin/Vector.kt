@@ -11,8 +11,8 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
 
     private fun uoe() = UnsupportedOperationException()
 
-    fun lengthSquared() = this dot this
-    fun length() = sqrt(lengthSquared())
+    val lengthSquared get() = this dot this
+    val length get() = sqrt(lengthSquared)
 
     operator fun plus(other: Vector) = spread(Double::plus, other)
     operator fun minus(other: Vector) = spread(Double::minus, other)
@@ -30,7 +30,7 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
 
     private fun spread(op: Double.(Double) -> Double, o: Vector) = Vector(x.op(o.x), y.op(o.y), z.op(o.z))
 
-    fun normalised() = this / this.length()
+    fun normalised() = this / this.length
 
     override fun toString(): String = "[$x, $y, $z]"
 }
