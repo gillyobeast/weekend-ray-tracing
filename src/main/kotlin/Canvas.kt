@@ -7,5 +7,8 @@ data class Canvas(
     override fun toString(): String {
         return "$width $height"
     }
+
+    operator fun get(column: Int, row: Int): Pair<Double, Double> =
+        column.d / (width - 1) to row.d / (height - 1)
 }
 

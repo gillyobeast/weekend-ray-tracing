@@ -15,8 +15,7 @@ class RayTracer {
         for (row in canvas.rows.reversed()) {
             println("Scanlines remaining: ${row + 1}")
             for (column in canvas.columns) {
-                val u = column.d / (canvas.width - 1)
-                val v = row.d / (canvas.height - 1)
+                val (u, v) = canvas[column, row]
 
                 output + colour(camera[u, v], world)
             }
