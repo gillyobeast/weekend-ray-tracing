@@ -1,3 +1,8 @@
+import Colour.Companion.BLACK
+import Colour.Companion.RED
+import Colour.Companion.WHITE
+
+
 class RayTracer {
     fun render(canvas: Canvas): String {
         val output = buildHeader(canvas)
@@ -28,9 +33,26 @@ class RayTracer {
     }
 
     private fun colour(ray: Ray): Colour {
+        if (ray.hitsSphere(Point(0, 0, -1), 0.5)) {
+            return RED
+        }
+        return background(ray)
+    }
+
+    private fun Ray.hitsSphere(center: Point, radius: Double): Boolean {
+        val oc = origin - center
+        val a = direction dot direction
+        val b = 2.0 * (oc dot direction)
+        val c = (oc dot oc) - radius * radius
+        val discriminant = b * b - 4 * (a * c)
+
+        return discriminant > 0
+    }
+
+    private fun background(ray: Ray): Colour {
         val unit = ray.direction.normalised()
         val t = (unit.y + 1)
-        return Colour(1, 1, 1) * (1 - t) + Colour(0,0,0) * t
+        return WHITE * (1 - t) + BLACK * t
     }
 
     private fun buildHeader(canvas: Canvas): StringBuilder {
@@ -38,5 +60,4 @@ class RayTracer {
         val colourDepth = 255
         return StringBuilder("$colourSpace\n$canvas\n$colourDepth\n")
     }
-
 }

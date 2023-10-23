@@ -20,7 +20,7 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     operator fun times(scale: Double) = Vector(x * scale, y * scale, z * scale)
     operator fun div(scale: Double) = this * (1 / scale)
 
-    infix fun dot(other: Vector): Double = x * other.x + y * other.y + z * other.z
+    infix fun dot(other: Vector): Double = (x * other.x) + (y * other.y) + (z * other.z)
     infix fun cross(other: Vector): Vector = Vector(
         this.y * other.z - this.z * other.y,
         this.z * other.x - this.x * other.z,
