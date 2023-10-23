@@ -1,4 +1,4 @@
-class Ray(val origin: Point, val direction: Point) {
-    operator fun get(t: Double): Point =
-        origin + t * direction
+data class Ray(val origin: Vector, val direction: Vector) {
+    fun at(t: Double) = origin + t * direction
+
 }
