@@ -1,12 +1,17 @@
 import Colour.Companion.WHITE
-import kotlin.math.sqrt
 
 
 class RayTracer {
     fun render(canvas: Canvas): String {
         val output = buildHeader(canvas)
 
-        // Camera //
+        //  World   //
+        val world: Hittable = HittableList(
+            Sphere(Point(0, 0, -1), 0.5),
+            Sphere(Point(0, -100.5, -1), 100),
+        )
+
+        //  Camera  //
         val viewportHeight = 2.0
         val viewportWidth = viewportHeight * canvas.aspectRatio
         val focalLength = 1.0
@@ -23,7 +28,7 @@ class RayTracer {
                 val v = row.d / (canvas.height - 1)
 
                 val ray = Ray(origin, lowerLeft + u * horizontal + v * vertical - origin)
-                output + colour(ray)
+                output + colour(ray, world)
             }
             output + "\n"
         }
@@ -31,24 +36,15 @@ class RayTracer {
         return output()
     }
 
-    private fun colour(ray: Ray): Colour {
-        val sphereHitParam = ray.hitsSphere(Point(0, 0, -1), 0.5)
-        if (sphereHitParam != null) {
-            val unitNormal = (ray[sphereHitParam] - Vector(0, 0, -1)).normalised()
-            return Colour(unitNormal.x + 1, unitNormal.y + 1, unitNormal.z + 1) * .5
+    private fun colour(ray: Ray, world: Hittable): Colour {
+        val hitRecord = world.hit(ray, 0.0, Double.POSITIVE_INFINITY)
+        if (hitRecord != null) {
+            val n = hitRecord.outwardNormal
+            return Colour(1 + n.x, 1 + n.y, 1 + n.z) * 0.5
         }
         return background(ray)
     }
 
-    private fun Ray.hitsSphere(center: Point, radius: Double): Double? {
-        val oc = origin - center
-        val a = direction dot direction
-        val halfB = oc dot direction
-        val c = (oc dot oc) - radius * radius
-        val discriminant = (halfB * halfB) - (a * c)
-
-        return if (discriminant < 0) null else (-halfB - sqrt(discriminant) / a)
-    }
 
     private fun background(ray: Ray): Colour {
         val unitNormal = ray.direction.normalised()
