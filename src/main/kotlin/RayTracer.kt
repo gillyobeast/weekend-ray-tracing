@@ -1,6 +1,6 @@
 import Colour.Companion.BLACK
-import Colour.Companion.RED
 import Colour.Companion.WHITE
+import kotlin.math.sqrt
 
 
 class RayTracer {
@@ -33,25 +33,27 @@ class RayTracer {
     }
 
     private fun colour(ray: Ray): Colour {
-        if (ray.hitsSphere(Point(0, 0, -1), 0.5)) {
-            return RED
+        val sphereHitParam = ray.hitsSphere(Point(0, 0, -1), 0.5)
+        if (sphereHitParam != null) {
+            val unitNormal = (ray[sphereHitParam] - Vector(0, 0, -1)).normalised()
+            return Colour(unitNormal.x + 1, unitNormal.y + 1, unitNormal.z + 1) * .5
         }
         return background(ray)
     }
 
-    private fun Ray.hitsSphere(center: Point, radius: Double): Boolean {
+    private fun Ray.hitsSphere(center: Point, radius: Double): Double? {
         val oc = origin - center
         val a = direction dot direction
         val b = 2.0 * (oc dot direction)
         val c = (oc dot oc) - radius * radius
         val discriminant = b * b - 4 * (a * c)
 
-        return discriminant > 0
+        return if (discriminant < 0) null else (-b - sqrt(discriminant) / 2.0 * a)
     }
 
     private fun background(ray: Ray): Colour {
-        val unit = ray.direction.normalised()
-        val t = 0.5*(unit.y + 1)
+        val unitNormal = ray.direction.normalised()
+        val t = 0.5 * (unitNormal.y + 1)
         return WHITE * (1 - t) + BLACK * t
     }
 
