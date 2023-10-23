@@ -5,7 +5,7 @@ fun main() {
     measureTime {
 
         val aspectRatio = 16.0 / 9.0
-        val width = 10
+        val width = 400
         val height = (width / aspectRatio).toInt()
         val canvas = Canvas(width, height)
 
