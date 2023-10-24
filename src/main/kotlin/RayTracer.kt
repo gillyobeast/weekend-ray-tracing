@@ -1,5 +1,4 @@
 import Colour.Companion.BLACK
-import Colour.Companion.BLUE
 import Colour.Companion.WHITE
 
 class RayTracer {
@@ -16,11 +15,11 @@ class RayTracer {
         for (row in canvas.rows.reversed()) {
             println("Scanlines remaining: ${row + 1}")
             for (column in canvas.columns) {
-                val colour = (1..samplesPerPixel).fold(BLACK) { totalColour, _ ->
+                val colour = ((1..samplesPerPixel).fold(BLACK) { totalColour, _ ->
                     val (u, v) = canvas.randomPointIn(column, row)
                     val ray = camera[u, v]
                     totalColour + colour(ray, world)
-                } / samplesPerPixel
+                } / samplesPerPixel).gammaCorrect()
                 output + colour
             }
             output + "\n"
@@ -29,9 +28,10 @@ class RayTracer {
         return output()
     }
 
+
     private tailrec fun colour(ray: Ray, world: Hittable, depth: Int = 50, reflectivity: Double = 1.0): Colour {
         if (depth <= 0) return BLACK
-        val hitRecord = world.hit(ray, 0.0, Double.POSITIVE_INFINITY)
+        val hitRecord = world.hit(ray, 0.001, Double.POSITIVE_INFINITY)
         if (hitRecord != null) {
             val n = hitRecord.outwardNormal
             val target = hitRecord.hitPoint + n + Vector.randomInUnitSphere()

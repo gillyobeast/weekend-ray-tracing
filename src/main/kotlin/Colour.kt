@@ -6,10 +6,13 @@ data class Colour(val r: Double, val g: Double, val b: Double) {
     }
 
     private fun Double.scale() = (255.999 * this).toInt()
-    operator fun times(scale: Double): Colour = Colour(r * scale, g * scale, b * scale)
-    operator fun plus(other: Colour) = spread(Double::plus, other)
-    private fun spread(op: Double.(Double) -> Double, o: Colour) = Colour(r.op(o.r), g.op(o.g), b.op(o.b))
+    operator fun times(scale: Double): Colour = onEachComponent(Double::times, scale)
     operator fun div(scale: Number): Colour = this * (1 / scale.d)
+    operator fun plus(other: Colour) = onEachComponent(Double::plus, other)
+    private fun onEachComponent(op: Double.(Double) -> Double, o: Colour) = Colour(r.op(o.r), g.op(o.g), b.op(o.b))
+    private fun onEachComponent(op: Double.(Double) -> Double, o: Double) = Colour(r.op(o), g.op(o), b.op(o))
+    private fun onEachComponent(op: Double.() -> Double) = Colour(r.op(), g.op(), b.op())
+    fun gammaCorrect() = onEachComponent(Math::sqrt)
 
     companion object {
         val RED = Colour(1, 0, 0)
