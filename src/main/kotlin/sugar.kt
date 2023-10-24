@@ -15,6 +15,7 @@ operator fun Double.times(vector: Vector) = vector * this
 fun Double.clamp(minimumValue: Double, maximumValue: Double) =
     coerceAtMost(maximumValue).coerceAtLeast(minimumValue)
 
+fun Number.toRadians(): Double = Math.toRadians(this.d)
 
 
 typealias Point = Vector

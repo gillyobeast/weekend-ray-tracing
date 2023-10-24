@@ -1,4 +1,6 @@
-class Camera(canvas: Canvas) {
+import kotlin.math.tan
+
+class Camera(verticalFovDegrees: Number, aspectRatio: Double) {
 
     private val origin: Point
     private val horizontal: Vector
@@ -7,8 +9,11 @@ class Camera(canvas: Canvas) {
 
 
     init {
-        val viewportHeight = 2.0
-        val viewportWidth = viewportHeight * canvas.aspectRatio
+        val theta = verticalFovDegrees.toRadians()
+        val h = tan(theta / 2)
+
+        val viewportHeight = 2.0 * h
+        val viewportWidth = viewportHeight * aspectRatio
         val focalLength = 1.0
 
         origin = Point()

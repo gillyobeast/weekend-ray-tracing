@@ -1,18 +1,22 @@
 import Colour.Companion.BLACK
+import Colour.Companion.BLUE
+import Colour.Companion.RED
 import Colour.Companion.WHITE
+import kotlin.math.PI
+import kotlin.math.cos
+
 
 class RayTracer {
     fun render(canvas: Canvas, samplesPerPixel: Int = 100): String {
         val output = buildHeader(canvas)
 
+        val r = cos(PI/4)
 
-        val ground = Sphere(Point(0, -100.5, -1), 100, Lambertian(Colour(.8, .8, 0)))
-        val center = Sphere(Point(0, 0, -1), 0.5, Lambertian(Colour(.1, .2, .5)))
-        val left = Sphere(Point(-1, 0, -1), 0.5, Dielectric(1.5))
-        val right = Sphere(Point(1, 0, -1), 0.5, Metal(Colour(.8, .6, .2), .9))
-        val world: Hittable = HittableList(ground, center, left, right)
+        val left = Sphere(Point(-r,0, -1), r, Lambertian(BLUE))
+        val right = Sphere(Point(r, 0, -1), r, Lambertian(RED))
+        val world: Hittable = HittableList(left, right)
 
-        val camera = Camera(canvas)
+        val camera = Camera(90, canvas.aspectRatio)
 
         for (row in canvas.rows.reversed()) {
             println("Scanlines remaining: ${row + 1}")
