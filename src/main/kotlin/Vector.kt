@@ -38,5 +38,6 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     companion object {
         fun randomInUnitCube(): Vector = Vector(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
         fun randomInUnitSphere(): Vector = generateSequence { randomInUnitCube() }.first { it.length <= 1 }
+        fun randomUnitVector(): Vector = randomInUnitSphere().normalised()
     }
 }

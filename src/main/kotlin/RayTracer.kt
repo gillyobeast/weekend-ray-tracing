@@ -1,5 +1,6 @@
 import Colour.Companion.BLACK
 import Colour.Companion.WHITE
+import Vector.Companion.randomUnitVector
 
 class RayTracer {
     fun render(canvas: Canvas, samplesPerPixel: Int = 100): String {
@@ -34,7 +35,7 @@ class RayTracer {
         val hitRecord = world.hit(ray, 0.001, Double.POSITIVE_INFINITY)
         if (hitRecord != null) {
             val n = hitRecord.outwardNormal
-            val target = hitRecord.hitPoint + n + Vector.randomInUnitSphere()
+            val target = hitRecord.hitPoint + n + randomUnitVector()
             return colour(
                 Ray(hitRecord.hitPoint, target - hitRecord.hitPoint), world, depth - 1, 0.5 * reflectivity
             )
