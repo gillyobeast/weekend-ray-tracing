@@ -1,8 +1,8 @@
+import Colour.Companion.BLACK
 import Colour.Companion.WHITE
 
-
 class RayTracer {
-    fun render(canvas: Canvas): String {
+    fun render(canvas: Canvas, samplesPerPixel: Int = 100): String {
         val output = buildHeader(canvas)
 
         val world: Hittable = HittableList(
@@ -15,9 +15,12 @@ class RayTracer {
         for (row in canvas.rows.reversed()) {
             println("Scanlines remaining: ${row + 1}")
             for (column in canvas.columns) {
-                val (u, v) = canvas[column, row]
-
-                output + colour(camera[u, v], world)
+                val colour = (1..samplesPerPixel).fold(BLACK) { totalColour, _ ->
+                    val (u, v) = canvas.randomPointIn(column, row)
+                    val ray = camera[u, v]
+                    totalColour + colour(ray, world)
+                } / samplesPerPixel
+                output + colour
             }
             output + "\n"
         }
