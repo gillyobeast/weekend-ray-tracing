@@ -1,4 +1,5 @@
 import Colour.Companion.BLACK
+import Colour.Companion.BLUE
 import Colour.Companion.WHITE
 
 class RayTracer {
@@ -28,13 +29,17 @@ class RayTracer {
         return output()
     }
 
-    private fun colour(ray: Ray, world: Hittable): Colour {
+    private tailrec fun colour(ray: Ray, world: Hittable, depth: Int = 50, reflectivity: Double = 1.0): Colour {
+        if (depth <= 0) return BLACK
         val hitRecord = world.hit(ray, 0.0, Double.POSITIVE_INFINITY)
         if (hitRecord != null) {
             val n = hitRecord.outwardNormal
-            return Colour(1 + n.x, 1 + n.y, 1 + n.z) * 0.5
+            val target = hitRecord.hitPoint + n + Vector.randomInUnitSphere()
+            return colour(
+                Ray(hitRecord.hitPoint, target - hitRecord.hitPoint), world, depth - 1, 0.5 * reflectivity
+            )
         }
-        return background(ray)
+        return background(ray) * reflectivity
     }
 
 

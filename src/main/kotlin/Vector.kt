@@ -1,4 +1,5 @@
 import kotlin.math.sqrt
+import kotlin.random.Random
 
 data class Vector(val x: Double, val y: Double, val z: Double) {
     constructor() : this(0.0, 0.0, 0.0)
@@ -33,4 +34,9 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     fun normalised() = this / this.length
 
     override fun toString(): String = "[$x, $y, $z]"
+
+    companion object {
+        fun randomInUnitCube(): Vector = Vector(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
+        fun randomInUnitSphere(): Vector = generateSequence { randomInUnitCube() }.first { it.length <= 1 }
+    }
 }
