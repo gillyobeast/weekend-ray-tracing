@@ -9,6 +9,7 @@ data class Colour(val r: Double, val g: Double, val b: Double) {
     operator fun times(scale: Double): Colour = onEachComponent(Double::times, scale)
     operator fun div(scale: Number): Colour = this * (1 / scale.d)
     operator fun plus(other: Colour) = onEachComponent(Double::plus, other)
+    operator fun times(other: Colour): Colour = onEachComponent(Double::times, other)
     private fun onEachComponent(op: Double.(Double) -> Double, o: Colour) = Colour(r.op(o.r), g.op(o.g), b.op(o.b))
     private fun onEachComponent(op: Double.(Double) -> Double, o: Double) = Colour(r.op(o), g.op(o), b.op(o))
     private fun onEachComponent(op: Double.() -> Double) = Colour(r.op(), g.op(), b.op())

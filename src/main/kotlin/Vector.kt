@@ -1,3 +1,4 @@
+import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -32,6 +33,9 @@ data class Vector(val x: Double, val y: Double, val z: Double) {
     private fun spread(op: Double.(Double) -> Double, o: Vector) = Vector(x.op(o.x), y.op(o.y), z.op(o.z))
 
     fun normalised() = this / this.length
+    private val nearZero = 1e-8
+
+    fun nearZero(): Boolean = abs(x) < nearZero && abs(y) < nearZero && abs(z) < nearZero
 
     override fun toString(): String = "[$x, $y, $z]"
 

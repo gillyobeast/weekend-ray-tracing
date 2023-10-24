@@ -1,15 +1,16 @@
 import Colour.Companion.BLACK
 import Colour.Companion.WHITE
-import Vector.Companion.randomUnitVector
 
 class RayTracer {
     fun render(canvas: Canvas, samplesPerPixel: Int = 100): String {
         val output = buildHeader(canvas)
 
-        val world: Hittable = HittableList(
-            Sphere(Point(0, 0, -1), 0.5),
-            Sphere(Point(0, -100.5, -1), 100),
-        )
+
+        val ground = Sphere(Point(0, -100.5, -1), 100, Lambertian(Colour(.8, .8, 0)))
+        val center = Sphere(Point(0, 0, -1), 0.5, Lambertian(Colour(.7, .3, .3)))
+        val left = Sphere(Point(-1, 0, -1), 0.5, Metal(Colour(.8, .8, .8), .3))
+        val right = Sphere(Point(1, 0, -1), 0.5, Metal(Colour(.8, .6, .2), .9))
+        val world: Hittable = HittableList(ground, center, left, right)
 
         val camera = Camera(canvas)
 
@@ -30,17 +31,14 @@ class RayTracer {
     }
 
 
-    private tailrec fun colour(ray: Ray, world: Hittable, depth: Int = 50, reflectivity: Double = 1.0): Colour {
+    private tailrec fun colour(ray: Ray, world: Hittable, depth: Int = 50, reflection: Colour = WHITE): Colour {
         if (depth <= 0) return BLACK
-        val hitRecord = world.hit(ray, 0.001, Double.POSITIVE_INFINITY)
-        if (hitRecord != null) {
-            val n = hitRecord.outwardNormal
-            val target = hitRecord.hitPoint + n + randomUnitVector()
-            return colour(
-                Ray(hitRecord.hitPoint, target - hitRecord.hitPoint), world, depth - 1, 0.5 * reflectivity
-            )
-        }
-        return background(ray) * reflectivity
+        val hitRecord = world.hit(ray, 0.001, Double.POSITIVE_INFINITY) ?: return background(ray) * reflection
+        val (scatteredRay, attenuation) = hitRecord.material.scatter(ray, hitRecord) ?: return BLACK
+
+        return colour(
+            scatteredRay, world, depth - 1, attenuation * reflection
+        )
     }
 
 
