@@ -31,7 +31,7 @@ class RayTracer {
     }
 
 
-    private tailrec fun colour(ray: Ray, world: Hittable, depth: Int = 50, reflection: Colour = WHITE): Colour {
+    private tailrec fun colour(ray: Ray, world: Hittable, depth: Int = 10, reflection: Colour = WHITE): Colour {
         if (depth <= 0) return BLACK
         val hitRecord = world.hit(ray, 0.001, Double.POSITIVE_INFINITY) ?: return background(ray) * reflection
         val (scatteredRay, attenuation) = hitRecord.material.scatter(ray, hitRecord) ?: return BLACK

@@ -11,7 +11,7 @@ fun interface Material {
 
 
     fun refract(incoming: Vector, normal: Vector, refractiveRatio: Double): Vector {
-        val cosTheta = min(incoming dot normal, 1.0) // should be max?
+        val cosTheta = min(incoming dot normal, 1.0)
         val perp = refractiveRatio * (incoming + cosTheta * normal)
         val parallel = normal * (-sqrt(abs(1 - perp.lengthSquared)))
         return perp + parallel
