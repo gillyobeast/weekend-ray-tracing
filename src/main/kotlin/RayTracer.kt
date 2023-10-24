@@ -7,8 +7,8 @@ class RayTracer {
 
 
         val ground = Sphere(Point(0, -100.5, -1), 100, Lambertian(Colour(.8, .8, 0)))
-        val center = Sphere(Point(0, 0, -1), 0.5, Lambertian(Colour(.7, .3, .3)))
-        val left = Sphere(Point(-1, 0, -1), 0.5, Metal(Colour(.8, .8, .8), .3))
+        val center = Sphere(Point(0, 0, -1), 0.5, Dielectric(1.5))
+        val left = Sphere(Point(-1, 0, -1), 0.5, Dielectric( 1.3))
         val right = Sphere(Point(1, 0, -1), 0.5, Metal(Colour(.8, .6, .2), .9))
         val world: Hittable = HittableList(ground, center, left, right)
 

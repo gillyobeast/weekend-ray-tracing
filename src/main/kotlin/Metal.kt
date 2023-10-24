@@ -13,6 +13,4 @@ class Metal(private val albedo: Colour, fuzz: Number = 0.0) : Material {
 
     }
 
-    private fun reflect(direction: Vector, normal: Vector): Vector =
-        direction - 2 * (direction dot normal) * normal
 }

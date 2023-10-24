@@ -21,6 +21,6 @@ data class Sphere(val center: Point, val radius: Double, val material: Material)
         val hitPoint = ray[root]
         val normal = (hitPoint - center) / radius
         val normalFaceOut = ray.direction dot normal < 0
-        return HitRecord(hitPoint, if (normalFaceOut) normal else -normal, material, root)
+        return HitRecord(hitPoint, normal, normalFaceOut, material, root)
     }
 }
