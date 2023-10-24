@@ -1,3 +1,6 @@
+import kotlin.math.min
+import kotlin.math.sqrt
+
 class Dielectric(private val indexOfRefraction: Double) : Material {
 
 
@@ -5,10 +8,19 @@ class Dielectric(private val indexOfRefraction: Double) : Material {
 
         val refractiveRatio = if (hitRecord.normalFacesOut) 1.0 / indexOfRefraction else indexOfRefraction
         val normal = if (hitRecord.normalFacesOut) hitRecord.outwardNormal else -hitRecord.outwardNormal
+        val unitDirection = ray.direction.normalised()
 
-        val refractionDirection = refract(ray.direction.normalised(), normal, refractiveRatio)
+        val cosTheta = min(-unitDirection dot normal, 1.0)
+        val sinTheta = sqrt(1.0 - cosTheta * cosTheta)
+        val cannotRefract = refractiveRatio * sinTheta > 1
 
-        return Ray(hitRecord.hitPoint, refractionDirection) to Colour.WHITE
+        val direction = if (cannotRefract)
+            reflect(unitDirection, normal)
+        else refract(
+            unitDirection, normal, refractiveRatio
+        )
+
+        return Ray(hitRecord.hitPoint, direction) to Colour.WHITE
     }
 
 }
